@@ -1,0 +1,160 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jewelry Boutique</title>
+  <style>
+    body {
+      font-family: 'Georgia', serif;
+      margin: 0;
+      background: url('https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+    }
+    .overlay {
+      background: rgba(0, 0, 0, 0.85);
+      min-height: 100vh;
+      padding: 2rem;
+    }
+    nav {
+      background-color: rgba(255, 192, 203, 0.8);
+      color: #000;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    .filters {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+      justify-content: center;
+    }
+    .filters input, .filters select {
+      padding: 0.5rem;
+      border-radius: 5px;
+      border: none;
+    }
+    .product-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      background: #fff;
+      color: #000;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    .card-content {
+      padding: 1rem;
+    }
+    .card-content h2 {
+      margin-top: 0;
+    }
+    .special {
+      border: 2px solid gold;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <nav>
+      <h1>Elegant Jewelry Boutique</h1>
+      <p>Discover timeless beauty with our handcrafted designs</p>
+    </nav>
+    <div class="filters">
+      <input type="text" id="search" placeholder="Search jewelry..." oninput="filterJewelry()">
+      <select id="categoryFilter" onchange="filterJewelry()">
+        <option value="">All Categories</option>
+        <option value="Rings">Rings</option>
+        <option value="Necklaces">Necklaces</option>
+        <option value="Bracelets">Bracelets</option>
+        <option value="Earrings">Earrings</option>
+      </select>
+      <select id="sort" onchange="filterJewelry()">
+        <option value="default">Sort by</option>
+        <option value="asc">Price: Low to High</option>
+        <option value="desc">Price: High to Low</option>
+      </select>
+    </div>
+    <div id="product-list" class="product-list"></div>
+  </div>
+
+  <script>
+    const jewelryItems = [
+      {
+        name: "Diamond Engagement Ring",
+        image: "https://images.unsplash.com/photo-1611926653458-d95b8a2c7386",
+        description: "A stunning 1.5 carat diamond ring with a platinum band.",
+        category: "Rings",
+        price: 4500,
+        special: true
+      },
+      {
+        name: "Gold Necklace",
+        image: "https://images.unsplash.com/photo-1600185365522-d46554f56b51",
+        description: "18K gold necklace with intricate design and ruby centerpiece.",
+        category: "Necklaces",
+        price: 3200,
+        special: false
+      },
+      {
+        name: "Pearl Drop Earrings",
+        image: "https://images.unsplash.com/photo-1625842021570-4bb17350719b",
+        description: "Classic pearl earrings perfect for any formal event.",
+        category: "Earrings",
+        price: 980,
+        special: true
+      },
+      {
+        name: "Silver Charm Bracelet",
+        image: "https://images.unsplash.com/photo-1592415486687-e7e75e5ed2cc",
+        description: "Sterling silver bracelet with customizable charm options.",
+        category: "Bracelets",
+        price: 1200,
+        special: false
+      }
+    ];
+
+    function filterJewelry() {
+      const search = document.getElementById('search').value.toLowerCase();
+      const category = document.getElementById('categoryFilter').value;
+      const sort = document.getElementById('sort').value;
+
+      let filtered = jewelryItems.filter(item =>
+        item.name.toLowerCase().includes(search) &&
+        (!category || item.category === category)
+      );
+
+      if (sort === "asc") filtered.sort((a, b) => a.price - b.price);
+      else if (sort === "desc") filtered.sort((a, b) => b.price - a.price);
+
+      const list = document.getElementById('product-list');
+      list.innerHTML = filtered.map(item => `
+        <div class="card ${item.special ? 'special' : ''}">
+          <img src="${item.image}" alt="${item.name}">
+          <div class="card-content">
+            <h2>${item.name}</h2>
+            <p><strong>Category:</strong> ${item.category}</p>
+            <p><strong>Price:</strong> $${item.price}</p>
+            <p>${item.description}</p>
+            ${item.special ? "<p><strong>🌟 Special Item!</strong></p>" : ""}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    document.addEventListener('DOMContentLoaded', filterJewelry);
+  </script>
+</body>
+</html>
